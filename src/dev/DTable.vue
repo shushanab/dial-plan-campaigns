@@ -1,15 +1,91 @@
 <template>
     <v-app id="inspire">
+        <v-snackbar
+            v-model="snackbar"
+            multi-line
+            top
+            :timeout="snackbarTimeout"
+            :color="snackbarColor"
+        >
+            <p class="snackbar-message">{{ snackbarText }}</p>
+            <v-btn
+                flat
+                color="black"
+                @click="snackbar = false"
+            >
+                Close
+            </v-btn>
+        </v-snackbar>
         <v-dialog
             v-model="dialog"
+            scrollable
             width="800"
-            height="500"
         >
             <v-card>
-                <v-card-title class="headline">{{ dialogTitle }} {{ selected }}</v-card-title>
+                <v-card-title class="headline selected-company-title-placeholder">{{ dialogTitle }}
+                    <span class="selected-company-title">
+                        {{ selectedCompany }} {{ selected }}
+                    </span>
+                </v-card-title>
 
-                <v-card-text>
-                    Drag and drop functionality will be here!
+                <v-card-text class="fixed-height">
+                    <v-container grid-list-md text-xs-center>
+                        <v-layout row wrap>
+                            <v-flex xs4>
+                                <v-text-field
+                                    class="edit-phone"
+                                    label="Phone number"
+                                    v-model="selectedCompanyPhone"
+                                ></v-text-field>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout row wrap>
+                            <v-flex xs6>
+                                <v-list>
+                                    <v-list-tile disabled>{{ selectedCompaniesPlaceholder }}
+                                    </v-list-tile>
+                                    <draggable
+                                        v-model="selComp"
+                                        group="companies"
+                                        ghost-class="ghost"
+                                        v-bind="dragOptions"
+                                        @start="drag=true"
+                                        @end="drag=false"
+                                        class="list-group"
+                                    >
+                                        <transition-group  type="transition" :name="!drag ? 'flip-list' : null">
+                                            <v-list-tile v-for="company in selComp" :key="company.id"
+                                                class="list-group-item">
+                                                {{ company.name }}
+                                            </v-list-tile>
+                                        </transition-group>
+                                    </draggable>
+                                </v-list>
+                            </v-flex>
+                            <v-flex xs6>
+                                <v-list>
+                                    <v-list-tile disabled>{{ allCompaniesPlaceholder }}
+                                    </v-list-tile>
+                                        <draggable
+                                            v-model="allCompanies"
+                                            group="companies"
+                                            ghost-class="ghost"
+                                            v-bind="dragOptions"
+                                            @start="drag=true"
+                                            @end="drag=false"
+                                            class="list-group"
+                                        >
+                                            <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+                                                <v-list-tile v-for="company in allCompanies" :key="company.id"
+                                                    class="list-group-item">
+                                                    {{ company.name }}
+                                                </v-list-tile>
+                                            </transition-group>
+                                        </draggable>
+                                </v-list>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
                 </v-card-text>
 
                 <v-card-actions>
@@ -25,7 +101,7 @@
                         color="green darken-1"
                         flat="flat"
                         @click="dialog = false"
-                        >Save</v-btn>
+                    >Save</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -73,10 +149,10 @@
                 <template v-slot:items="props">
                     <tr :key="props.item.id"
                         :active="props.item.selected"
-                        @click="selectRow(props.item.id)"
                         :class="{'selectedRow': props.item.selected}"
+                        @click="selectRow(props.item)"
                     >
-                        <td class="text-xs-left subheading">{{ props.item.name }}</td>
+                        <td class="text-xs-left subheading">{{ props.item.name }} {{ props.item.id }}</td>
                         <td class="text-xs-left subheading">{{ props.item.phone }}</td>
                         <td class="text-xs-left">
                             <v-btn depressed @click="editRow(props.item.id)">Edit
@@ -91,23 +167,59 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable'
+
 const faker = require('faker');
 
 export default {
     name: 'filtering-table',
     components: {
+        draggable
     },
     data() {
         return {
             title: 'Dial Plan',
-            dialogTitle: 'Edditing row number',
+            dialogTitle: 'Edditing company ',
             dialog: false,
+            snackbar: false,
+            snackbarText: '',
+            snackbarColor: 'warning',
+            snackbarTimeout: 6000,
             selected: null,
+            selectedCompany: null,
+            selectedCompanyPhone: null,
+            selectedCompaniesPlaceholder: 'Selected Company(es)',
+            allCompaniesPlaceholder: 'All Companies',
             search: '',
+            drag: false,
             loading: true,
             pagination: {
+                rowsPerPage: '10',
                 sortBy: 'name'
             },
+            selComp: [],
+            allCompanies: [
+                {
+                    'name': faker.company.companyName(),
+                    'id': 40
+                },
+                {
+                    'name': faker.company.companyName(),
+                    'id': 41
+                },
+                {
+                    'name': faker.company.companyName(),
+                    'id': 42
+                },
+                {
+                    'name': faker.company.companyName(),
+                    'id': 43
+                },
+                {
+                    'name': faker.company.companyName(),
+                    'id': 44
+                }
+            ],
             headers: [
                 {
                     text: 'Company Name',
@@ -163,23 +275,45 @@ export default {
                     phone: faker.phone.phoneNumber(),
                     action: 'edit',
                     selected: false
+                },
+                {
+                    id: 6,
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
                 }
             ]
         }
     },
     content: {
     },
+    computed: {
+        dragOptions() {
+            return {
+                animation: 200,
+                group: 'description',
+                disabled: false,
+                ghostClass: 'ghost'
+            };
+        }
+    },
     methods: {
-        selectRow(id) {
+        selectRow(el) {
             this.items.filter((item) => {
-                if(item.id === id) {
+                if(item.id === el.id) {
                     item.selected = true;
+                    this.selectedCompany = el.name;
+                    this.selected = el.id;
+                    this.selectedCompanyPhone = el.phone;
+                    this.selComp.push(el);
+                    this.snackbar = true;
+                    this.snackbarText = 'Sorry, this company already Exists, please try anouther one!'
                 }
                 else {
                     item.selected = false;
                 }
             })
-            this.selected = id;
             // console.log('ID: ', id);
         },
         editRow(id) {
@@ -196,7 +330,6 @@ export default {
         },
         changeSort(column) {
             console.log('SORTING BY COLUMN: ', column);
-            this.loading = true;
             if (this.pagination.sortBy === column) {
                 this.pagination.descending = !this.pagination.descending;
             }
@@ -204,13 +337,12 @@ export default {
                 this.pagination.sortBy = column;
                 this.pagination.descending = false;
             }
-            this.loading = false;
         }
     },
     mounted() {
         setTimeout(() => {
             this.loading = false;
-        }, 2000);
+        }, 3000);
     }
 }
 </script>
@@ -222,5 +354,57 @@ export default {
 
 .page-title {
     padding-left: 10px;
+}
+
+.fixed-height {
+    height: 648px!important;
+}
+
+.edit-phone {
+    padding-left: 10px;
+}
+
+.snackbar-message {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spaceing: 0.5;
+}
+
+.selected-company-title-placeholder {
+    padding-left: 46px!important;
+    padding-top: 34px!important;
+    .selected-company-title {
+        font-weight: 500;
+        padding-left: 8px;
+    }
+}
+
+.flip-list-move {
+    -webkit-transition: -webkit-transform 0.5s;
+    transition: -webkit-transform 0.5s;
+    transition: transform 0.5s;
+    transition: transform 0.5s, -webkit-transform 0.5s;
+}
+
+.no-move {
+    -webkit-transition: -webkit-transform 0s;
+    transition: -webkit-transform 0s;
+    transition: transform 0s;
+    transition: transform 0s, -webkit-transform 0s;
+}
+
+.ghost {
+    opacity: 0.5;
+    background: #c8ebfb;
+}
+
+.list-group {
+    min-height: 20px;
+    .list-group-item {
+        cursor: move;
+    }
+    .list-group-item i {
+       cursor: pointer;
+    }
 }
 </style>
