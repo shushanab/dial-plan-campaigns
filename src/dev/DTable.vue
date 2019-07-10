@@ -19,7 +19,7 @@
         <v-dialog
             v-model="dialog"
             scrollable
-            width="800"
+            :width="dialogWidth"
         >
             <v-card>
                 <v-card-title class="headline selected-company-title-placeholder">{{ dialogTitle }}
@@ -155,7 +155,7 @@
                         <td class="text-xs-left subheading">{{ props.item.name }} {{ props.item.id }}</td>
                         <td class="text-xs-left subheading">{{ props.item.phone }}</td>
                         <td class="text-xs-left">
-                            <v-btn depressed @click="editRow(props.item.id)">Edit
+                            <v-btn depressed @click="editRow(props.item)">Edit
                                 <v-icon small right>edit</v-icon>
                             </v-btn>
                         </td>
@@ -181,6 +181,7 @@ export default {
             title: 'Dial Plan',
             dialogTitle: 'Edditing company ',
             dialog: false,
+            dialogWidth: '800',
             snackbar: false,
             snackbarText: '',
             snackbarColor: 'warning',
@@ -306,9 +307,6 @@ export default {
                     this.selectedCompany = el.name;
                     this.selected = el.id;
                     this.selectedCompanyPhone = el.phone;
-                    this.selComp.push(el);
-                    this.snackbar = true;
-                    this.snackbarText = 'Sorry, this company already Exists, please try anouther one!'
                 }
                 else {
                     item.selected = false;
@@ -316,17 +314,34 @@ export default {
             })
             // console.log('ID: ', id);
         },
-        editRow(id) {
+        editRow(el) {
             this.items.filter((item) => {
-                if(item.id === id) {
+                if(item.id === el.id) {
                     item.selected = true;
                 }
                 else {
                     item.selected = false;
                 }
             });
-            this.dialog = true;
-            console.log('ID: ', id);
+            if(!this.selComp.length) {
+                this.selComp.push(el);
+                this.dialog = true;
+            }
+            else {
+                this.selComp.forEach((item, i) => {
+                    if(item.id !== el.id) {
+                        console.log('IF ID: ', el.id);
+                        this.selComp.push(el);
+                        this.dialog = true;
+                    }
+                    else {
+                        console.log('ID: ', el.id);
+                        this.snackbar = true;
+                        this.snackbarText = 'Sorry, this company already Exists, please try anouther one!';
+                        return false;
+                    }
+                });
+            }
         },
         changeSort(column) {
             console.log('SORTING BY COLUMN: ', column);
