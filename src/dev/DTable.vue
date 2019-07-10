@@ -202,23 +202,23 @@ export default {
             allCompanies: [
                 {
                     'name': faker.company.companyName(),
-                    'id': 40
+                    'id': faker.random.number()
                 },
                 {
                     'name': faker.company.companyName(),
-                    'id': 41
+                    'id': faker.random.number()
                 },
                 {
                     'name': faker.company.companyName(),
-                    'id': 42
+                    'id': faker.random.number()
                 },
                 {
                     'name': faker.company.companyName(),
-                    'id': 43
+                    'id': faker.random.number()
                 },
                 {
                     'name': faker.company.companyName(),
-                    'id': 44
+                    'id': faker.random.number()
                 }
             ],
             headers: [
@@ -243,42 +243,63 @@ export default {
             ],
             items: [
                 {
-                    id: 1,
+                    id: faker.random.number(),
                     name: faker.company.companyName(),
                     phone: faker.phone.phoneNumber(),
                     action: 'edit',
                     selected: false
                 },
                 {
-                    id: 2,
+                    id: faker.random.number(),
                     name: faker.company.companyName(),
                     phone: faker.phone.phoneNumber(),
                     action: 'edit',
                     selected: false
                 },
                 {
-                    id: 3,
+                    id: faker.random.number(),
                     name: faker.company.companyName(),
                     phone: faker.phone.phoneNumber(),
                     action: 'edit',
                     selected: false
                 },
                 {
-                    id: 4,
+                    id: faker.random.number(),
                     name: faker.company.companyName(),
                     phone: faker.phone.phoneNumber(),
                     action: 'edit',
                     selected: false
                 },
                 {
-                    id: 5,
+                    id: faker.random.number(),
                     name: faker.company.companyName(),
                     phone: faker.phone.phoneNumber(),
                     action: 'edit',
                     selected: false
                 },
                 {
-                    id: 6,
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                },
+                {
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                },
+                {
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                },
+                {
+                    id: faker.random.number(),
                     name: faker.company.companyName(),
                     phone: faker.phone.phoneNumber(),
                     action: 'edit',
@@ -330,12 +351,10 @@ export default {
             else {
                 this.selComp.forEach((item, i) => {
                     if(item.id !== el.id) {
-                        console.log('IF ID: ', el.id);
                         this.selComp.push(el);
                         this.dialog = true;
                     }
                     else {
-                        console.log('ID: ', el.id);
                         this.snackbar = true;
                         this.snackbarText = 'Sorry, this company already Exists, please try anouther one!';
                         return false;
