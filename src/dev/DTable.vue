@@ -240,6 +240,71 @@ export default {
                     class: 'action-edit',
                     sortable: false
                 }
+            ],
+            items: [
+                {
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                },
+                {
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                },
+                {
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                },
+                {
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                },
+                {
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                },
+                {
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                },
+                {
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                },
+                {
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                },
+                {
+                    id: faker.random.number(),
+                    name: faker.company.companyName(),
+                    phone: faker.phone.phoneNumber(),
+                    action: 'edit',
+                    selected: false
+                }
             ]
         }
     },
@@ -253,21 +318,19 @@ export default {
                 disabled: false,
                 ghostClass: 'ghost'
             };
-        },
-        items() {
-            const arr = [];
-            for(let i = 0; i < 15; i++) {
-                const el = {
-                    id: faker.random.number(),
-                    name: faker.company.companyName(),
-                    phone: faker.phone.phoneNumber(),
-                    action: 'edit',
-                    selected: false
-                };
-                arr.push(el);
-            }
-            return arr;
         }
+        // items() {
+        //     const arr = [];
+        //     for(let i = 0; i < 15; i++) {
+        //         let el = {
+        //             id: faker.random.number(),
+        //             name: faker.company.companyName(),
+        //             phone: faker.phone.phoneNumber(),
+        //             action: 'edit',
+        //             selected: false
+        //         }
+        //     }
+        // }
     },
     methods: {
         selectRow(el) {
