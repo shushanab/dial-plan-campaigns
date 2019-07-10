@@ -1,0 +1,54 @@
+{
+  "name": "adrack",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "dependencies": {
+    "array-move": "^2.1.0",
+    "array-shuffle": "^1.0.1",
+    "cross-storage": "^1.0.0",
+    "directory-named-webpack-plugin": "^4.0.1",
+    "faker": "^4.1.0",
+    "lodash": "^4.17.11",
+    "sass-loader": "^7.1.0",
+    "v-tooltip": "^2.0.0-rc.33",
+    "vue": "^2.6.6",
+    "vuetify": "^1.5.16",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.4.0",
+    "@vue/cli-plugin-eslint": "^3.4.0",
+    "@vue/cli-plugin-unit-mocha": "^3.4.0",
+    "@vue/cli-service": "^3.5.3",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "@vue/test-utils": "^1.0.0-beta.20",
+    "babel-eslint": "^10.0.1",
+    "canvas": "^2.4.1",
+    "chai": "^4.1.2",
+    "commitizen": "^3.0.7",
+    "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "jest": "^24.8.0",
+    "js-yaml": "^3.13.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "vue-cli-plugin-vuetify": "^0.4.6",
+    "vue-template-compiler": "^2.5.21",
+    "vuepress": "^1.0.0-alpha.47",
+    "vuetify-loader": "^1.0.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
