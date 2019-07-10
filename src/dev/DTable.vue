@@ -100,7 +100,7 @@
                     <v-btn
                         color="green darken-1"
                         flat="flat"
-                        @click="dialog = false"
+                        @click="save"
                     >Save</v-btn>
                 </v-card-actions>
             </v-card>
@@ -179,7 +179,7 @@ export default {
     data() {
         return {
             title: 'Dial Plan',
-            dialogTitle: 'Edditing company ',
+            dialogTitle: 'Edditing company',
             dialog: false,
             dialogWidth: '800',
             snackbar: false,
@@ -195,7 +195,7 @@ export default {
             drag: false,
             loading: true,
             pagination: {
-                rowsPerPage: '10',
+                rowsPerPage: 10,
                 sortBy: 'name'
             },
             selComp: [],
@@ -345,7 +345,6 @@ export default {
                     item.selected = false;
                 }
             })
-            // console.log('ID: ', id);
         },
         editRow(el) {
             this.items.filter((item) => {
@@ -368,7 +367,7 @@ export default {
                     }
                     else {
                         this.snackbar = true;
-                        this.snackbarText = 'Sorry, this company already Exists, please try anouther one!';
+                        this.snackbarText = `Sorry, this company already Exists, please try anouther one!`;
                         return false;
                     }
                 });
@@ -383,6 +382,13 @@ export default {
                 this.pagination.sortBy = column;
                 this.pagination.descending = false;
             }
+        },
+        save() {
+            this.dialog = false;
+            this.snackbarColor = 'success';
+            this.snackbarText = `Congrats! ${this.selectedCompany} company detailes are successfuly saved!`;
+            this.snackbar = true;
+            console.log('FINAL EDDITTED COMPANIES: ', this.selComp);
         }
     },
     mounted() {
