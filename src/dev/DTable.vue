@@ -24,18 +24,29 @@
             <v-card>
                 <v-card-title class="headline selected-company-title-placeholder">{{ dialogTitle }}
                     <span class="selected-company-title">
-                        {{ selectedCompany }} {{ selected }}
+                        {{ selected }}
                     </span>
                 </v-card-title>
 
                 <v-card-text class="fixed-height">
                     <v-container grid-list-md text-xs-center>
                         <v-layout row wrap>
-                            <v-flex xs4>
+                            <v-flex xs6>
                                 <v-text-field
                                     class="edit-phone"
                                     label="Phone number"
+                                    ref="phone-number"
+                                    :rules="[rules.required]"
                                     v-model="selectedCompanyPhone"
+                                ></v-text-field>
+                            </v-flex>
+                            <v-flex xs6>
+                                <v-text-field
+                                    class="edit-title"
+                                    label="Company name"
+                                    ref="company-name"
+                                    :rules="[rules.required]"
+                                    v-model="selectedCompany"
                                 ></v-text-field>
                             </v-flex>
                         </v-layout>
@@ -179,7 +190,7 @@ export default {
     data() {
         return {
             title: 'Dial Plan',
-            dialogTitle: 'Edditing company',
+            dialogTitle: 'Edit company details',
             dialog: false,
             dialogWidth: '800',
             snackbar: false,
@@ -191,6 +202,9 @@ export default {
             selectedCompanyPhone: null,
             selectedCompaniesPlaceholder: 'Selected Company(es)',
             allCompaniesPlaceholder: 'All Companies',
+            rules: {
+                required: value => !!value || 'Required.'
+            },
             search: '',
             drag: false,
             loading: true,
@@ -318,6 +332,15 @@ export default {
                 disabled: false,
                 ghostClass: 'ghost'
             };
+        },
+        isValid() {
+            let valid = true;
+            
+            Object.keys(this.$refs).forEach(f => {
+                if (!this.$refs[f].value) valid = false;
+                this.$refs[f].validate(true);
+            })
+            return valid;
         }
         // items() {
         //     const arr = [];
@@ -360,17 +383,9 @@ export default {
                 this.dialog = true;
             }
             else {
-                this.selComp.forEach((item, i) => {
-                    if(item.id !== el.id) {
-                        this.selComp.push(el);
-                        this.dialog = true;
-                    }
-                    else {
-                        this.snackbar = true;
-                        this.snackbarText = `Sorry, this company already Exists, please try anouther one!`;
-                        return false;
-                    }
-                });
+                this.selComp.length = 0;
+                this.selComp.push(el);
+                this.dialog = true;
             }
         },
         changeSort(column) {
@@ -384,11 +399,13 @@ export default {
             }
         },
         save() {
-            this.dialog = false;
-            this.snackbarColor = 'success';
-            this.snackbarText = `Congrats! ${this.selectedCompany} company detailes are successfuly saved!`;
-            this.snackbar = true;
-            console.log('FINAL EDDITTED COMPANIES: ', this.selComp);
+            if(this.isValid) {
+                this.dialog = false;
+                this.snackbarColor = 'success';
+                this.snackbarText = `Congrats! ${this.selectedCompany} company detailes are successfuly saved!`;
+                this.snackbar = true;
+                console.log('FINAL EDDITTED COMPANIES: ', this.selComp);
+            }
         }
     },
     mounted() {
@@ -454,9 +471,15 @@ export default {
     min-height: 20px;
     .list-group-item {
         cursor: move;
+        min-height: 20px;
     }
     .list-group-item i {
        cursor: pointer;
+    }
+    span {
+        min-height: 50px;
+        border: 1px dashed grey;
+        display: block;
     }
 }
 </style>
