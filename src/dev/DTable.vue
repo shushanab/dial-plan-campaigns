@@ -335,7 +335,7 @@ export default {
         },
         isValid() {
             let valid = true;
-            
+
             Object.keys(this.$refs).forEach(f => {
                 if (!this.$refs[f].value) valid = false;
                 this.$refs[f].validate(true);
